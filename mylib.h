@@ -1,6 +1,8 @@
 #ifndef mylib
 #define mylib
-
+#include <array>
+#include <cstdlib>
+#include <ctime>
 #include <iostream>
 #include <numeric>
 #include <string>
@@ -17,37 +19,48 @@ using std::fixed;
 using std::setprecision;
 using std::sort;
 using std::domain_error;
+using std::array;
+using std::setw;
+using std::left;
+using std::right;
+using std::to_string;
 
 // Išorinis kintamasis galutinio balo skaičiavimo pasirinkimui
-extern char skaiciavimas;
+extern char skaiciavimoStrategija;
 
 // Studentas klasės aprašymas
 class Studentas {
     string vardas, pavarde;
-    vector<int> nd_paz;
+    vector<int> pazymiai;
     int egzaminas;
-    float galutinis;
+    float galutinisBalas;
 
 public:
     Studentas();  // Konstruktorius be parametru
-    Studentas(string vardas, string pavarde, vector<int> nd_paz, int egzaminas); // Konstruktorius su parametrais
+    Studentas(string vardas, string pavarde, vector<int> pazymiai, int egzaminas); // Konstruktorius su parametrais
     Studentas(const Studentas& temp); // Kopijavimo konstruktorius
     Studentas& operator=(const Studentas& temp); // Kopijavimo priskyrimo operatorius
     ~Studentas(); // Destruktorius
 
-    void print();
-    void print_galutinis();
-    void galutinis_vid();
-    void galutinis_med();
+    void spausdinti();
+    void spausdintiGalutiniBala(); // Išvedimas su galutiniu balu
 
-    void operator>>(std::istream& input);
-    void operator<<(std::ostream& out);
+    void skaiciuotiGalutiniVidurki(); // Metodas skaičiuojantis galutinį pažymį pagal vidurkį
+    void skaiciuotiGalutiniMediana(); // Metodas skaičiuojantis galutinį pažymį pagal medianą
 
-    double med(vector<int> vector);
+    double skaiciuotiMediana(vector<int> vec); // Funkcija skaičiuojanti medianą
 
-    inline string getVardas() { return vardas; }
-    inline int getPazNr() { return nd_paz.size(); }
-    inline void setVardas(string t) { vardas = t; }
+    void operator>>(std::istream& input);  // Perdenčia cin operatorių
+    void operator<<(std::ostream& output); // Perdenčia cout operatorių
+
+    // Getteriai, pažymėti kaip const
+    inline string gautiVarda() const { return vardas; }
+    inline string gautiPavarde() const { return pavarde; }
+    inline vector<int> gautiPazymius() const { return pazymiai; }
+    inline int gautiEgzaminoBala() const { return egzaminas; }
+    inline float gautiGalutiniBalaVidurkis() const { return galutinisBalas; }
+    inline float gautiGalutiniBalaMediana() const { return galutinisBalas; }
+    inline int gautiPazymiuKieki() const { return pazymiai.size(); }
 };
 
 #endif
