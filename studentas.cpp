@@ -2,71 +2,73 @@
 
 // Konstruktorius be parametrų
 Studentas::Studentas() {
+    srand(time(0));//random skaiciu generatorius
+
     cout << "Iveskite studento pavarde: "; cin >> pavarde;
     cout << "Iveskite studento varda: "; cin >> vardas;
     cout << "Kiek pazymiu buvo semestre? ";
-    int n; cin >> n;
+    int pazymiuKiekis; cin >> pazymiuKiekis;
 
-    for (int i = 0; i < n; i++) {
-        int k;
-        cout << "Ivesk " << i + 1 << " semestro pazymi: "; cin >> k; nd_paz.push_back(k);
+    for (int i = 0; i < pazymiuKiekis; i++) {
+        int pazymys = rand() % 10 + 1; // Random pazymys tarp 1 ir 10
+        pazymiai.push_back(pazymys);
     }
 
-    cout << "Iveskite egzamino pazymi: "; cin >> egzaminas;
-    skaiciavimas == 'm' ? galutinis_med() : galutinis_vid();
+    egzaminas = rand() % 10 + 1; // Random egzaminas tarp 1 ir 10
+    skaiciavimoStrategija == 'm' ? skaiciuotiGalutiniMediana() : skaiciuotiGalutiniVidurki();
 }
 
 // Konstruktorius su parametrais
-Studentas::Studentas(string Vard, string Pavard, vector<int> nd, int Egz)
-    : vardas(Vard), pavarde(Pavard), nd_paz(nd), egzaminas(Egz) {
-    skaiciavimas == 'm' ? galutinis_med() : galutinis_vid();
+Studentas::Studentas(string vardas, string pavarde, vector<int> pazymiai, int egzaminas)
+    : vardas(vardas), pavarde(pavarde), pazymiai(pazymiai), egzaminas(egzaminas) {
+    skaiciavimoStrategija == 'm' ? skaiciuotiGalutiniMediana() : skaiciuotiGalutiniVidurki();
 }
 
 // Kopijavimo konstruktorius
 Studentas::Studentas(const Studentas& temp)
-    : vardas(temp.vardas), pavarde(temp.pavarde), nd_paz(temp.nd_paz), egzaminas(temp.egzaminas) {
-    skaiciavimas == 'm' ? galutinis_med() : galutinis_vid();
+    : vardas(temp.vardas), pavarde(temp.pavarde), pazymiai(temp.pazymiai), egzaminas(temp.egzaminas) {
+    skaiciavimoStrategija == 'm' ? skaiciuotiGalutiniMediana() : skaiciuotiGalutiniVidurki();
 }
 
 // Kopijavimo priskyrimo operatorius
 Studentas& Studentas::operator=(const Studentas& temp) {
     if (this == &temp) return *this;
     vardas = temp.vardas; pavarde = temp.pavarde;
-    nd_paz = temp.nd_paz; egzaminas = temp.egzaminas;
-    skaiciavimas == 'm' ? galutinis_med() : galutinis_vid();
+    pazymiai = temp.pazymiai; egzaminas = temp.egzaminas;
+    skaiciavimoStrategija == 'm' ? skaiciuotiGalutiniMediana() : skaiciuotiGalutiniVidurki();
     return *this;
 }
 
 // Destruktorius
 Studentas::~Studentas() {
-    vardas.clear(); pavarde.clear(); nd_paz.clear();
+    vardas.clear(); pavarde.clear(); pazymiai.clear();
 }
 
 // Išvedimas be galutinio balo
-void Studentas::print() {
+void Studentas::spausdinti() {
     printf("|%-20s|%-20s|", pavarde.c_str(), vardas.c_str());
-    for (auto& pazymys : nd_paz) printf("%3d|", pazymys);
-    printf("%10d|\n", egzaminas);
+    for (auto& pazymys : pazymiai) printf("%3d|", pazymys);
+    printf("%10d|", egzaminas);
 }
 
 // Išvedimas su galutiniu balu
-void Studentas::print_galutinis() {
-    printf("|%-20s|%-20s|%20.2f|\n", pavarde.c_str(), vardas.c_str(), galutinis);
+void Studentas::spausdintiGalutiniBala() {
+    printf("|%-20s|%-20s|%20.2f|", pavarde.c_str(), vardas.c_str(), galutinisBalas);
 }
 
 // Galutinio balo skaičiavimas pagal vidurkį
-void Studentas::galutinis_vid() {
-    float suma = std::accumulate(nd_paz.begin(), nd_paz.end(), 0.0);
-    galutinis = suma / nd_paz.size() * 0.4 + egzaminas * 0.6;
+void Studentas::skaiciuotiGalutiniVidurki() {
+    float suma = std::accumulate(pazymiai.begin(), pazymiai.end(), 0.0);
+    galutinisBalas = suma / pazymiai.size() * 0.4 + egzaminas * 0.6;
 }
 
 // Galutinio balo skaičiavimas pagal medianą
-void Studentas::galutinis_med() {
-    galutinis = med(nd_paz) * 0.4 + egzaminas * 0.6;
+void Studentas::skaiciuotiGalutiniMediana() {
+    galutinisBalas = skaiciuotiMediana(pazymiai) * 0.4 + egzaminas * 0.6;
 }
 
 // Medianos skaičiavimas
-double Studentas::med(vector<int> vec) {
+double Studentas::skaiciuotiMediana(vector<int> vec) {
     if (vec.empty())
         throw std::domain_error("Negalima skaiciuoti medianos tusciam vektoriui");
     sort(vec.begin(), vec.end());
@@ -78,10 +80,10 @@ double Studentas::med(vector<int> vec) {
 void Studentas::operator>>(std::istream& input) {
     input >> pavarde >> vardas;
     int n; input >> n;
-    nd_paz.resize(n);
-    for (int& paz : nd_paz) input >> paz;
+    pazymiai.resize(n);
+    for (int& paz : pazymiai) input >> paz;
     input >> egzaminas;
-    skaiciavimas == 'm' ? galutinis_med() : galutinis_vid();
+    skaiciavimoStrategija == 'm' ? skaiciuotiGalutiniMediana() : skaiciuotiGalutiniVidurki();
 }
 
 // Perdengtas cout
@@ -89,8 +91,8 @@ void Studentas::operator<<(std::ostream& output) {
     output << "Vardas: " << vardas << endl;
     output << "Pavarde: " << pavarde << endl;
     output << "Pazymiai: ";
-    for (const auto& paz : nd_paz) output << paz << " ";
+    for (const auto& paz : pazymiai) output << paz << " ";
     output << endl;
     output << "Egzamino pazymys: " << egzaminas << endl;
-    output << "Galutinis balas: " << fixed << setprecision(2) << galutinis << endl;
+    output << "Galutinis balas: " << fixed << setprecision(2) << galutinisBalas << endl;
 }
