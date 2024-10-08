@@ -1,6 +1,6 @@
 #include "mylib.h"
 
-// Default Constructor
+
 Studentas::Studentas() {
     srand(time(0));
 
