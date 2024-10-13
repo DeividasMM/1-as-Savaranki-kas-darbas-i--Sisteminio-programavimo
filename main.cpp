@@ -1,28 +1,27 @@
 #include "mylib.h"
 
-bool compareByFinalScore(const Studentas& a, const Studentas& b) {
-    return a.gautiGalutiniBala() < b.gautiGalutiniBala();
-}
+Studentas ivestiNaujaStudenta() {
+    string vardas, pavarde;
+    vector<int> pazymiai(7);
+    int egzaminas;
+    char skaiciavimoStrategija;
 
-int main() {
+    cout << "Iveskite studento varda: ";
+    cin >> vardas;
 
-    char skaiciavimoStrategija = 'v';
-    string failoPavadinimas;
+    cout << "Iveskite studento pavarde: ";
+    cin >> pavarde;
 
-    cout << "Pasirinkite studentu faila (1k, 10k, 100k, 1M, 10M): ";
-    string pasirinkimas;
-    cin >> pasirinkimas;
-    if (pasirinkimas == "1k") failoPavadinimas = "studentai1000.txt";
-    else if (pasirinkimas == "10k") failoPavadinimas = "studentai10000.txt";
-    else if (pasirinkimas == "100k") failoPavadinimas = "studentai100000.txt";
-    else if (pasirinkimas == "1M") failoPavadinimas = "studentai1000000.txt";
-    else if (pasirinkimas == "10M") failoPavadinimas = "studentai10000000.txt";
-    else {
-        cout << "Neteisingas pasirinkimas. Naudojamas 1k failas." << endl;
-        failoPavadinimas = "studentai1000.txt";
+    cout << "Iveskite 7 namu darbu pazymius:\n";
+    for (int i = 0; i < 7; ++i) {
+        cout << "ND" << (i + 1) << ": ";
+        cin >> pazymiai[i];
     }
 
-    cout << "Kaip skaiciuoti galutini bala? (v - vidurkis, m - mediana): ";
+    cout << "Iveskite egzamino pazymi: ";
+    cin >> egzaminas;
+
+    cout << "Kaip norite skaiciuoti galutini bala? (v - vidurkis, m - mediana): ";
     cin >> skaiciavimoStrategija;
 
     if (skaiciavimoStrategija != 'v' && skaiciavimoStrategija != 'm') {
@@ -30,23 +29,113 @@ int main() {
         skaiciavimoStrategija = 'v';
     }
 
-    auto startRead = high_resolution_clock::now();
+    Studentas naujasStudentas(vardas, pavarde, pazymiai, egzaminas, skaiciavimoStrategija);
+    return naujasStudentas;
+}
 
+void rusiavimasStudentu(vector<Studentas>& studentuGrupe, vector<Studentas>& vargsiukai, vector<Studentas>& kietiakiai) {
+    for (const auto& studentas : studentuGrupe) {
+        if (studentas.gautiGalutiniBala() < 5.0) {
+            vargsiukai.push_back(studentas);
+        }
+        else {
+            kietiakiai.push_back(studentas);
+        }
+    }
+
+    sort(vargsiukai.begin(), vargsiukai.end(), [](const Studentas& a, const Studentas& b) {
+        return a.gautiGalutiniBala() > b.gautiGalutiniBala();
+        });
+
+    sort(kietiakiai.begin(), kietiakiai.end(), [](const Studentas& a, const Studentas& b) {
+        return a.gautiGalutiniBala() > b.gautiGalutiniBala();
+        });
+}
+
+void isvedimasIFailus(const vector<Studentas>& vargsiukai, const vector<Studentas>& kietiakiai) {
+    ofstream vargsiukuFailas("vargsiukai.txt");
+    ofstream kietiakiuFailas("kietiakiai.txt");
+
+    vargsiukuFailas << left << setw(15) << "Vardas" << setw(15) << "Pavarde" << setw(20) << "Galutinis balas" << endl;
+    vargsiukuFailas << "--------------------------------------------------" << endl;
+
+    kietiakiuFailas << left << setw(15) << "Vardas" << setw(15) << "Pavarde" << setw(20) << "Galutinis balas" << endl;
+    kietiakiuFailas << "--------------------------------------------------" << endl;
+
+    for (const auto& studentas : vargsiukai) {
+        vargsiukuFailas << left << setw(15) << studentas.gautiVarda()
+            << setw(15) << studentas.gautiPavarde()
+            << right << setw(20) << fixed << setprecision(2) << studentas.gautiGalutiniBala()
+            << endl;
+    }
+
+    for (const auto& studentas : kietiakiai) {
+        kietiakiuFailas << left << setw(15) << studentas.gautiVarda()
+            << setw(15) << studentas.gautiPavarde()
+            << right << setw(20) << fixed << setprecision(2) << studentas.gautiGalutiniBala()
+            << endl;
+    }
+
+    vargsiukuFailas.close();
+    kietiakiuFailas.close();
+
+    cout << "Is viso studentu: " << vargsiukai.size() + kietiakiai.size() << endl;
+    cout << "Vargsiukai: " << vargsiukai.size() << ", Kietiakiai: " << kietiakiai.size() << endl;
+}
+
+int main() {
     vector<Studentas> studentuGrupe;
     string eilute;
+    int pasirinkimas = 0;
+
+    cout << "Pasirinkite, koki faila norite sugeneruoti:\n";
+    cout << "1 - 1000 studentu\n";
+    cout << "2 - 10000 studentu\n";
+    cout << "3 - 100000 studentu\n";
+    cout << "4 - 1000000 studentu\n";
+    cout << "5 - 10000000 studentu\n";
+    cout << "Iveskite pasirinkima (1-5): ";
+    cin >> pasirinkimas;
+
+    int irasuKiekis = 0;
+    string failoPavadinimas;
+    switch (pasirinkimas) {
+    case 1:
+        irasuKiekis = 1000;
+        failoPavadinimas = "studentai_1000.txt";
+        break;
+    case 2:
+        irasuKiekis = 10000;
+        failoPavadinimas = "studentai_10000.txt";
+        break;
+    case 3:
+        irasuKiekis = 100000;
+        failoPavadinimas = "studentai_100000.txt";
+        break;
+    case 4:
+        irasuKiekis = 1000000;
+        failoPavadinimas = "studentai_1000000.txt";
+        break;
+    case 5:
+        irasuKiekis = 10000000;
+        failoPavadinimas = "studentai_10000000.txt";
+        break;
+    default:
+        cout << "Neteisingas pasirinkimas, generuojama 1000 studentu." << endl;
+        irasuKiekis = 1000;
+        failoPavadinimas = "studentai_1000.txt";
+        break;
+    }
+
+    auto start_nuskaitymas = std::chrono::high_resolution_clock::now();
 
     ifstream failas(failoPavadinimas);
-    try {
-        if (!failas.is_open()) {
-            throw runtime_error("Klaida atidarant failą.");
-        }
-
+    if (failas.is_open()) {
         getline(failas, eilute);
-
         while (getline(failas, eilute)) {
             string vardas, pavarde;
-            int egzaminas;
             vector<int> pazymiai;
+            int egzaminas;
 
             istringstream iss(eilute);
             iss >> vardas >> pavarde;
@@ -56,113 +145,48 @@ int main() {
                 pazymiai.push_back(pazymys);
             }
 
-            if (pazymiai.empty()) {
-                throw runtime_error("Studento pazymiu sarasas tuscias.");
-            }
-
             egzaminas = pazymiai.back();
             pazymiai.pop_back();
 
-            Studentas naujasStudentas(vardas, pavarde, pazymiai, egzaminas, skaiciavimoStrategija);
-            if (skaiciavimoStrategija == 'v') {
-                naujasStudentas.skaiciuotiGalutiniVidurki();
-            }
-            else {
-                naujasStudentas.skaiciuotiGalutiniMediana();
-            }
-
+            Studentas naujasStudentas(vardas, pavarde, pazymiai, egzaminas, 'v');
             studentuGrupe.push_back(naujasStudentas);
         }
-
         failas.close();
-
-        cout << studentuGrupe.size() << " studentai nuskaityti." << endl;
-
     }
-    catch (const exception& e) {
-        cout << "Ivyko klaida: " << e.what() << endl;
-        return 1;
+    else {
+        cout << "Nepavyko atidaryti failo " << failoPavadinimas << endl;
     }
 
-    auto endRead = high_resolution_clock::now();
-    auto readDuration = duration<double>(endRead - startRead).count();
-    cout << "Failo nuskaitymas uztruko: " << readDuration << " sec" << endl;
+    auto end_nuskaitymas = std::chrono::high_resolution_clock::now();
+    std::chrono::duration<double> trukme_nuskaitymas = end_nuskaitymas - start_nuskaitymas;
+    cout << "Duomenu nuskaitymo trukme: " << trukme_nuskaitymas.count() << " sekundziu\n";
 
-    auto startSort = high_resolution_clock::now();
+    char ivestiNauja;
+    cout << "Ar norite ivesti nauja studenta? (y/n): ";
+    cin >> ivestiNauja;
 
-    sort(studentuGrupe.begin(), studentuGrupe.end(), compareByFinalScore);
-
-    auto endSort = high_resolution_clock::now();
-    auto sortDuration = duration<double>(endSort - startSort).count();
-    cout << "Rusiavimas uztruko: " << sortDuration << " sec" << endl;
-
-    auto startWrite = high_resolution_clock::now();
-
-    ofstream vargsiukuFailas("vargsiukai.txt", ios::app);
-    ofstream kietiakuFailas("kietiakiai.txt", ios::app);
-
-    for (const auto& studentas : studentuGrupe) {
-        if (studentas.gautiGalutiniBala() < 5.0) {
-            vargsiukuFailas << studentas << endl;
-        }
-        else {
-            kietiakuFailas << studentas << endl;
-        }
+    if (ivestiNauja == 'y' || ivestiNauja == 'Y') {
+        Studentas naujasStudentas = ivestiNaujaStudenta();
+        studentuGrupe.push_back(naujasStudentas);
     }
 
-    vargsiukuFailas.close();
-    kietiakuFailas.close();
+    auto start_rusiavimas = std::chrono::high_resolution_clock::now();
 
-    auto endWrite = high_resolution_clock::now();
-    auto writeDuration = duration<double>(endWrite - startWrite).count();
-    cout << "Isvedimas i failus uztruko: " << writeDuration << " sec" << endl;
+    vector<Studentas> vargsiukai;
+    vector<Studentas> kietiakiai;
+    rusiavimasStudentu(studentuGrupe, vargsiukai, kietiakiai);
 
-    cout << "Vargsiukai isvesti i 'vargsiukai.txt'. Kietiakiai isvesti i 'kietiakiai.txt'." << endl;
+    auto end_rusiavimas = std::chrono::high_resolution_clock::now();
+    std::chrono::duration<double> trukme_rusiavimas = end_rusiavimas - start_rusiavimas;
+    cout << "Studentu rusiavimo trukme: " << trukme_rusiavimas.count() << " sekundziu\n";
 
-    cout << "\nAr norite ivesti nauja studenta? (taip/ne): ";
-    string atsakymas;
-    cin >> atsakymas;
+    auto start_isvedimas = std::chrono::high_resolution_clock::now();
 
-    if (atsakymas == "taip") {
+    isvedimasIFailus(vargsiukai, kietiakiai);
 
-        string vardas, pavarde;
-        vector<int> pazymiai;
-        int egzaminas;
-
-        cout << "Iveskite naujo studento varda, pavarde, pazymius (suvesti 0 kad baigti):" << endl;
-        cin >> vardas >> pavarde;
-
-        int pazymys;
-        while (true) {
-            cin >> pazymys;
-            if (pazymys == 0) break;
-            pazymiai.push_back(pazymys);
-        }
-
-        egzaminas = pazymiai.back();
-        pazymiai.pop_back();
-
-        Studentas naujasStudentas(vardas, pavarde, pazymiai, egzaminas, skaiciavimoStrategija);
-        if (skaiciavimoStrategija == 'v') {
-            naujasStudentas.skaiciuotiGalutiniVidurki();
-        }
-        else {
-            naujasStudentas.skaiciuotiGalutiniMediana();
-        }
-
-        if (naujasStudentas.gautiGalutiniBala() < 5.0) {
-            ofstream vargsiukuFailas("vargsiukai.txt", ios::app);
-            vargsiukuFailas << naujasStudentas << endl;
-            vargsiukuFailas.close();
-            cout << "Naujas studentas priskirtas 'vargsiukai.txt'." << endl;
-        }
-        else {
-            ofstream kietiakuFailas("kietiakiai.txt", ios::app);
-            kietiakuFailas << naujasStudentas << endl;
-            kietiakuFailas.close();
-            cout << "Naujas studentas priskirtas 'kietiakiai.txt'." << endl;
-        }
-    }
+    auto end_isvedimas = std::chrono::high_resolution_clock::now();
+    std::chrono::duration<double> trukme_isvedimas = end_isvedimas - start_isvedimas;
+    cout << "Duomenu isvedimo i failus trukme: " << trukme_isvedimas.count() << " sekundziu\n";
 
     return 0;
 }
