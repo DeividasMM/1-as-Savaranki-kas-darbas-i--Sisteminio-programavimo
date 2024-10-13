@@ -1,5 +1,6 @@
 #include "mylib.h"
 
+
 Studentas::Studentas() {
     srand(time(0));
 
