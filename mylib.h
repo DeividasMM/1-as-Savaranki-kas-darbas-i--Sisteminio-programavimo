@@ -25,6 +25,7 @@ using std::left;
 using std::right;
 using std::fixed;
 using std::setprecision;
+using std::sort;
 using std::domain_error;
 using std::stringstream;
 using std::ifstream;
@@ -35,10 +36,8 @@ using std::ostream;
 using std::istringstream;
 using std::runtime_error;
 using std::to_string;
-using std::sort;
 using std::exception;
-using std::ios;
-using namespace std::chrono;
+using std::sort;
 
 class Studentas {
     string vardas, pavarde;
