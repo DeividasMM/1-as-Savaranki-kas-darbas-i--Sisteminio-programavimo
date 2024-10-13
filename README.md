@@ -1,13 +1,11 @@
 # 1-as-Savaranki-kas-darbas-i-Sisteminio-programavimo
 
-[Papildyta]:
+[Papildyta:]
 
-[Duomenų skaitimas iš failo kursiokai.txt]
+[Studentu failu generavimas nuo 1 tukstacio iki 10 milijonu]
 
-[Formatuotas duomenų išvedimas, viskas surūšiuota pagal vardus ir išlygiuota pagal stulpelius]
+[Studentu rusiavimas i du failus vargsiukai ir kietiakiai pagal galutini bala]
 
-[Įvykdyta kodo reorganizacija]
+[Laiko matavimas su chrono bilioteka, duomenu nuskaitymas, duomenu rusiavimas ir duomenu isvedimas i du failus]
 
-[Naudojama keli .cpp failai ir .h failas]
-
-[Minimaliai panaudotas išimčių valdymas]
+[Naujo studento ivedimas, bei jo rusiavimas i du failus]
