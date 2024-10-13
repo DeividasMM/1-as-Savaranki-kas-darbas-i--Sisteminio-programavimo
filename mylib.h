@@ -12,6 +12,7 @@
 #include <ctime>
 #include <fstream>
 #include <sstream>
+#include <chrono>
 
 using std::string;
 using std::cout;
@@ -35,6 +36,8 @@ using std::ostream;
 using std::istringstream;
 using std::runtime_error;
 using std::to_string;
+using std::exception;
+using std::sort;
 
 class Studentas {
     string vardas, pavarde;
