@@ -1,0 +1,80 @@
+1k
+---------------------------------------------------------------------------------
+Pasirinkite, koki faila norite sugeneruoti:
+1 - 1000 studentu
+2 - 10000 studentu
+3 - 100000 studentu
+4 - 1000000 studentu
+5 - 10000000 studentu
+Iveskite pasirinkima (1-5): 1
+Duomenu nuskaitymo trukme: 0.0319444 sekundziu
+Ar norite ivesti nauja studenta? (y/n): n
+Studentu rusiavimo trukme: 0.0247241 sekundziu
+Is viso studentu: 1000
+Vargsiukai: 417, Kietiakiai: 583
+Duomenu isvedimo i failus trukme: 0.0091527 sekundziu
+---------------------------------------------------------------------------------
+10k
+---------------------------------------------------------------------------------
+Pasirinkite, koki faila norite sugeneruoti:
+1 - 1000 studentu
+2 - 10000 studentu
+3 - 100000 studentu
+4 - 1000000 studentu
+5 - 10000000 studentu
+Iveskite pasirinkima (1-5): 2
+Duomenu nuskaitymo trukme: 0.293427 sekundziu
+Ar norite ivesti nauja studenta? (y/n): n
+Studentu rusiavimo trukme: 0.164089 sekundziu
+Is viso studentu: 10000
+Vargsiukai: 4240, Kietiakiai: 5760
+Duomenu isvedimo i failus trukme: 0.0800509 sekundziu
+---------------------------------------------------------------------------------
+100k
+---------------------------------------------------------------------------------
+Pasirinkite, koki faila norite sugeneruoti:
+1 - 1000 studentu
+2 - 10000 studentu
+3 - 100000 studentu
+4 - 1000000 studentu
+5 - 10000000 studentu
+Iveskite pasirinkima (1-5): 3
+Duomenu nuskaitymo trukme: 2.92482 sekundziu
+Ar norite ivesti nauja studenta? (y/n): n
+Studentu rusiavimo trukme: 1.56938 sekundziu
+Is viso studentu: 100000
+Vargsiukai: 41313, Kietiakiai: 58687
+Duomenu isvedimo i failus trukme: 0.745361 sekundziu
+---------------------------------------------------------------------------------
+1M
+---------------------------------------------------------------------------------
+Pasirinkite, koki faila norite sugeneruoti:
+1 - 1000 studentu
+2 - 10000 studentu
+3 - 100000 studentu
+4 - 1000000 studentu
+5 - 10000000 studentu
+Iveskite pasirinkima (1-5): 4
+Duomenu nuskaitymo trukme: 29.0608 sekundziu
+Ar norite ivesti nauja studenta? (y/n): n
+Studentu rusiavimo trukme: 16.4437 sekundziu
+Is viso studentu: 1000000
+Vargsiukai: 414473, Kietiakiai: 585527
+Duomenu isvedimo i failus trukme: 7.26356 sekundziu
+---------------------------------------------------------------------------------
+10M
+---------------------------------------------------------------------------------
+Pasirinkite, koki faila norite sugeneruoti:
+1 - 1000 studentu
+2 - 10000 studentu
+3 - 100000 studentu
+4 - 1000000 studentu
+5 - 10000000 studentu
+Iveskite pasirinkima (1-5): 5
+Duomenu nuskaitymo trukme: 286.608 sekundziu
+Ar norite ivesti nauja studenta? (y/n): n
+Studentu rusiavimo trukme: 158.855 sekundziu
+Is viso studentu: 10000000
+Vargsiukai: 4142187, Kietiakiai: 5857813
+Duomenu isvedimo i failus trukme: 68.2881 sekundziu
+---------------------------------------------------------------------------------
