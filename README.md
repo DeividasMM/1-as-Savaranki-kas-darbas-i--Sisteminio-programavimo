@@ -11,3 +11,5 @@
 [Naujo studento ivedimas, bei jo rusiavimas i du failus]
 
 [Patikrintas skirtumas tarp vector, list, deque konteineriu ir surasytas i atskirtus dokumentus]
+
+[Nepavyko padaryti konteinerio pasirinkimo]
