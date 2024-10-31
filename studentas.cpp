@@ -1,24 +1,51 @@
 #include "mylib.h"
 
-Studentas::Studentas() {
-    srand(time(0));
+Studentas Studentas::ivestiNaujaStudenta() {
+    string vardas, pavarde;
+    vector<int> pazymiai(7);
+    int egzaminas;
+    char skaiciavimoStrategija;
 
-    cout << "Iveskite studento pavarde: "; cin >> pavarde;
-    cout << "Iveskite studento varda: "; cin >> vardas;
-    cout << "Kiek pazymiu buvo semestre? ";
-    int pazymiuKiekis; cin >> pazymiuKiekis;
+    cout << "Iveskite studento varda: ";
+    cin >> vardas;
 
-    for (int i = 0; i < pazymiuKiekis; i++) {
-        int pazymys = rand() % 10 + 1;
-        pazymiai.push_back(pazymys);
+    cout << "Iveskite studento pavarde: ";
+    cin >> pavarde;
+
+    cout << "Iveskite 7 namu darbu pazymius:\n";
+    for (int i = 0; i < 7; ++i) {
+        cout << "ND" << (i + 1) << ": ";
+        cin >> pazymiai[i];
     }
 
-    egzaminas = rand() % 10 + 1;
+    cout << "Iveskite egzamino pazymi: ";
+    cin >> egzaminas;
+
+    cout << "Kaip norite skaiciuoti galutini bala? (v - vidurkis, m - mediana): ";
+    cin >> skaiciavimoStrategija;
+
+    if (skaiciavimoStrategija != 'v' && skaiciavimoStrategija != 'm') {
+        cout << "Neteisinga strategija. Naudojamas vidurkis (v)." << endl;
+        skaiciavimoStrategija = 'v';
+    }
+
+    Studentas naujasStudentas(vardas, pavarde, pazymiai, egzaminas, skaiciavimoStrategija);
+    return naujasStudentas;
+}
+
+void sortContainer(list<Studentas>& container) {
+    container.sort([](const Studentas& a, const Studentas& b) {
+        return a.gautiGalutiniBala() > b.gautiGalutiniBala();
+        });
+}
+
+Studentas::Studentas() : egzaminas(0), galutinisBalas(0.0f), skaiciavimoStrategija('v') {
 
 }
 
 Studentas::Studentas(string vardas, string pavarde, vector<int> pazymiai, int egzaminas, char strategija)
-    : vardas(vardas), pavarde(pavarde), pazymiai(pazymiai), egzaminas(egzaminas), skaiciavimoStrategija(strategija) {
+    : vardas(move(vardas)), pavarde(move(pavarde)), pazymiai(move(pazymiai)),
+    egzaminas(egzaminas), skaiciavimoStrategija(strategija) {
     if (skaiciavimoStrategija == 'm') {
         skaiciuotiGalutiniMediana();
     }
@@ -28,13 +55,8 @@ Studentas::Studentas(string vardas, string pavarde, vector<int> pazymiai, int eg
 }
 
 Studentas::Studentas(const Studentas& temp)
-    : vardas(temp.vardas), pavarde(temp.pavarde), pazymiai(temp.pazymiai), egzaminas(temp.egzaminas), skaiciavimoStrategija(temp.skaiciavimoStrategija) {
-    if (skaiciavimoStrategija == 'm') {
-        skaiciuotiGalutiniMediana();
-    }
-    else {
-        skaiciuotiGalutiniVidurki();
-    }
+    : vardas(temp.vardas), pavarde(temp.pavarde), pazymiai(temp.pazymiai),
+    egzaminas(temp.egzaminas), skaiciavimoStrategija(temp.skaiciavimoStrategija), galutinisBalas(temp.galutinisBalas) {
 }
 
 Studentas& Studentas::operator=(const Studentas& temp) {
@@ -44,20 +66,12 @@ Studentas& Studentas::operator=(const Studentas& temp) {
     pazymiai = temp.pazymiai;
     egzaminas = temp.egzaminas;
     skaiciavimoStrategija = temp.skaiciavimoStrategija;
-
-    if (skaiciavimoStrategija == 'm') {
-        skaiciuotiGalutiniMediana();
-    }
-    else {
-        skaiciuotiGalutiniVidurki();
-    }
+    galutinisBalas = temp.galutinisBalas;
     return *this;
 }
 
 Studentas::~Studentas() {
-    vardas.clear();
-    pavarde.clear();
-    pazymiai.clear();
+
 }
 
 void Studentas::spausdinti() {
@@ -71,7 +85,7 @@ void Studentas::spausdintiGalutiniBala() {
 }
 
 void Studentas::skaiciuotiGalutiniVidurki() {
-    float suma = std::accumulate(pazymiai.begin(), pazymiai.end(), 0.0f);
+    float suma = accumulate(pazymiai.begin(), pazymiai.end(), 0.0f);
     galutinisBalas = (suma / pazymiai.size()) * 0.4f + egzaminas * 0.6f;
 }
 
@@ -79,7 +93,7 @@ void Studentas::skaiciuotiGalutiniMediana() {
     galutinisBalas = skaiciuotiMediana(pazymiai) * 0.4f + egzaminas * 0.6f;
 }
 
-double Studentas::skaiciuotiMediana(vector<int> vec) {
+double Studentas::skaiciuotiMediana(vector<int>& vec) {
     if (vec.empty())
         throw domain_error("Negalima skaiciuoti medianos tusciam vektoriui");
     sort(vec.begin(), vec.end());

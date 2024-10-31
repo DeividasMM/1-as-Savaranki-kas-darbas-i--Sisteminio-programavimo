@@ -1,39 +1,14 @@
 #include "mylib.h"
 
-Studentas ivestiNaujaStudenta() {
-    string vardas, pavarde;
-    vector<int> pazymiai(7);
-    int egzaminas;
-    char skaiciavimoStrategija;
-
-    cout << "Iveskite studento varda: ";
-    cin >> vardas;
-
-    cout << "Iveskite studento pavarde: ";
-    cin >> pavarde;
-
-    cout << "Iveskite 7 namu darbu pazymius:\n";
-    for (int i = 0; i < 7; ++i) {
-        cout << "ND" << (i + 1) << ": ";
-        cin >> pazymiai[i];
-    }
-
-    cout << "Iveskite egzamino pazymi: ";
-    cin >> egzaminas;
-
-    cout << "Kaip norite skaiciuoti galutini bala? (v - vidurkis, m - mediana): ";
-    cin >> skaiciavimoStrategija;
-
-    if (skaiciavimoStrategija != 'v' && skaiciavimoStrategija != 'm') {
-        cout << "Neteisinga strategija. Naudojamas vidurkis (v)." << endl;
-        skaiciavimoStrategija = 'v';
-    }
-
-    Studentas naujasStudentas(vardas, pavarde, pazymiai, egzaminas, skaiciavimoStrategija);
-    return naujasStudentas;
+template <typename Container>
+void sortContainer(Container& container) {
+    sort(container.begin(), container.end(), [](const Studentas& a, const Studentas& b) {
+        return a.gautiGalutiniBala() > b.gautiGalutiniBala();
+        });
 }
 
-void rusiavimasStudentu(vector<Studentas>& studentuGrupe, vector<Studentas>& vargsiukai, vector<Studentas>& kietiakiai) {
+template <typename Container>
+void rusiavimasStudentu(Container& studentuGrupe, Container& vargsiukai, Container& kietiakiai) {
     for (const auto& studentas : studentuGrupe) {
         if (studentas.gautiGalutiniBala() < 5.0) {
             vargsiukai.push_back(studentas);
@@ -43,16 +18,12 @@ void rusiavimasStudentu(vector<Studentas>& studentuGrupe, vector<Studentas>& var
         }
     }
 
-    sort(vargsiukai.begin(), vargsiukai.end(), [](const Studentas& a, const Studentas& b) {
-        return a.gautiGalutiniBala() > b.gautiGalutiniBala();
-        });
-
-    sort(kietiakiai.begin(), kietiakiai.end(), [](const Studentas& a, const Studentas& b) {
-        return a.gautiGalutiniBala() > b.gautiGalutiniBala();
-        });
+    sortContainer(vargsiukai);
+    sortContainer(kietiakiai);
 }
 
-void isvedimasIFailus(const vector<Studentas>& vargsiukai, const vector<Studentas>& kietiakiai) {
+template <typename Container>
+void isvedimasIFailus(const Container& vargsiukai, const Container& kietiakiai) {
     ofstream vargsiukuFailas("vargsiukai.txt");
     ofstream kietiakiuFailas("kietiakiai.txt");
 
@@ -83,8 +54,9 @@ void isvedimasIFailus(const vector<Studentas>& vargsiukai, const vector<Studenta
     cout << "Vargsiukai: " << vargsiukai.size() << ", Kietiakiai: " << kietiakiai.size() << endl;
 }
 
-int main() {
-    vector<Studentas> studentuGrupe;
+template <typename Container>
+void runProgram() {
+    Container studentuGrupe;
     string eilute;
     int pasirinkimas = 0;
 
@@ -166,14 +138,14 @@ int main() {
     cin >> ivestiNauja;
 
     if (ivestiNauja == 'y' || ivestiNauja == 'Y') {
-        Studentas naujasStudentas = ivestiNaujaStudenta();
+        Studentas naujasStudentas = Studentas::ivestiNaujaStudenta();
         studentuGrupe.push_back(naujasStudentas);
     }
 
     auto start_rusiavimas = std::chrono::high_resolution_clock::now();
 
-    vector<Studentas> vargsiukai;
-    vector<Studentas> kietiakiai;
+    Container vargsiukai;
+    Container kietiakiai;
     rusiavimasStudentu(studentuGrupe, vargsiukai, kietiakiai);
 
     auto end_rusiavimas = std::chrono::high_resolution_clock::now();
@@ -187,6 +159,26 @@ int main() {
     auto end_isvedimas = std::chrono::high_resolution_clock::now();
     std::chrono::duration<double> trukme_isvedimas = end_isvedimas - start_isvedimas;
     cout << "Duomenu isvedimo i failus trukme: " << trukme_isvedimas.count() << " sekundziu\n";
+}
+
+int main() {
+    cout << "Koki konteineri noretumete patikrinti, Vector, List, Deque: ";
+    string containerChoice;
+    cin >> containerChoice;
+
+    if (containerChoice == "Vector" || containerChoice == "vector") {
+        runProgram<vector<Studentas>>();
+    }
+    else if (containerChoice == "List" || containerChoice == "list") {
+        runProgram<list<Studentas>>();
+    }
+    else if (containerChoice == "Deque" || containerChoice == "deque") {
+        runProgram<deque<Studentas>>();
+    }
+    else {
+        cout << "Neteisingas pasirinkimas, naudojamas vector" << endl;
+        runProgram<vector<Studentas>>();
+    }
 
     return 0;
 }
