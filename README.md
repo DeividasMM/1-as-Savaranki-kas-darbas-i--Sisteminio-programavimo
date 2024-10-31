@@ -109,6 +109,8 @@ Instrukcija, kaip naudotis:
 
 Atsisiuskite iš GitHub repozitorijos "Studentu duomenu bazes atsiuntimo failai.7z" archyvą
 
+"Būtinai reikia išarchyvuoti failus, kitaip programa nekorektiškai veikia"
+
 2 galimi būdai paleisti programa:
 
 Paleidus run.bat faila, tai startuos programa
