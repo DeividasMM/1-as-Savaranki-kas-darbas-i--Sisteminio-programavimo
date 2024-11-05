@@ -107,11 +107,13 @@
 
 Instrukcija, kaip naudotis:
 
-Atsisiuskite iš GitHub repozitorijos "Studentu duomenu bazes atsiuntimo failai.7z" archyvą
+Atsisiuskite iš GitHub repozitorijos "Studentu duomenu bazes atsiuntimo failai.7z" arba "Release.zip" archyvą
 
 "Būtinai reikia išarchyvuoti failus, kitaip programa nekorektiškai veikia"
 
-2 galimi būdai paleisti programa:
+3 galimi būdai paleisti programa:
+
+Užėjus į Release aplanką pamatysite .exe failą, jį paleidus, pasileis veikianti programa.
 
 Paleidus run.bat faila, tai startuos programa
 
